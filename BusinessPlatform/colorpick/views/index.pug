@@ -1,0 +1,46 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge, chrome=1")
+    meta(name="render" content="webkit")
+    meta(name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1")
+    title 色彩选择器
+    link(rel="stylesheet" href="css/index.min.css")
+  body
+    div.colorpicker
+      h3 拾色器
+      div.colorfield
+        img.colorfield-overlay(src="img/colorpicker_overlay.png" draggable="false")
+        div.drag
+      div.colorselector
+        canvas.colorselector-bg(width="30" height="300")
+        div.drag
+      p.rgb
+        label(for="R") R:
+        input(id="R" type="number" max="255" min="0" value="255")
+      p.rgb
+        label(for="G") G:
+        input(id="G" type="number" max="255" min="0" value="0")
+      p.rgb
+        label(for="B") B:
+        input(id="B" type="number" max="255" min="0" value="0")
+      p.hsl
+        label(for="H") H:
+        input(id="H" type="number" max="360" min="0" value="0")
+        | 度
+      p.hsl
+        label(for="S") S:
+        input(id="S" type="number" max="100" min="0" value="100")
+        | %
+      p.hsl
+        label(for="L") L:
+        input(id="L" type="number" max="100" min="0" value="50")
+        | %
+      p.hex
+        label(for="hex") #
+        input(id="hex" type="text" value="ff0000")
+      div.colorshow(style="background-color: #ff0000;")
+
+    script(type="text/javascript" src="js/color.js")
+    script(type="text/javascript" src="js/index.js")

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="render" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <title>色彩选择器</title>
+    <link rel="stylesheet" href="css/index.min.css">
+  </head>
+  <body>
+    <div class="colorpicker">
+      <h3>拾色器</h3>
+      <div class="colorfield"><img class="colorfield-overlay" src="img/colorpicker_overlay.png" draggable="false">
+        <div class="drag"></div>
+      </div>
+      <div class="colorselector">
+        <canvas class="colorselector-bg" width="30" height="300"></canvas>
+        <div class="drag"></div>
+      </div>
+      <p class="rgb">
+        <label for="R">R:</label>
+        <input id="R" type="number" max="255" min="0" value="255">
+      </p>
+      <p class="rgb">
+        <label for="G">G:</label>
+        <input id="G" type="number" max="255" min="0" value="0">
+      </p>
+      <p class="rgb">
+        <label for="B">B:</label>
+        <input id="B" type="number" max="255" min="0" value="0">
+      </p>
+      <p class="hsl">
+        <label for="H">H:</label>
+        <input id="H" type="number" max="360" min="0" value="0">度
+      </p>
+      <p class="hsl">
+        <label for="S">S:</label>
+        <input id="S" type="number" max="100" min="0" value="100">%
+      </p>
+      <p class="hsl">
+        <label for="L">L:</label>
+        <input id="L" type="number" max="100" min="0" value="50">%
+      </p>
+      <p class="hex">
+        <label for="hex">#</label>
+        <input id="hex" type="text" value="ff0000">
+      </p>
+      <div class="colorshow" style="background-color: #ff0000;"></div>
+    </div>
+    <script type="text/javascript" src="js/color.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+  </body>
+</html>
