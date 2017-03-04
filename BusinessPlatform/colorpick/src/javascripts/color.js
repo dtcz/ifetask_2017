@@ -15,47 +15,6 @@
         return new Color.prototype.init(color);
     }
 
-    Color.prototype.toHSB = function (){
-        if(this.rgb){
-            this.hsb = RGBToHSB(this.rgb);
-        } else if(this.hsl){
-            this.hsb = HSLToHSB(this.hsl);
-        } else if(this.hex){
-            this.hsb = HexToHSB(this.hex);
-        }
-        return this;
-    }
-    Color.prototype.toRGB = function (){
-        if(this.hsb){
-            this.rgb = HSBToRGB(this.hsb);
-        } else if(this.hsl){
-            this.rgb = HSLToRGB(this.hsl);
-        } else if(this.hex){
-            this.rgb = hexToRGB(this.hex);
-        }
-        return this;
-    }
-    Color.prototype.toHex = function (){
-        if(this.rgb){
-           this.hex = RGBToHex(this.rgb);
-        } else if(this.hsl){
-            this.hex = HSLToHex(this.hsl);
-        } else if(this.hsb){
-            this.hex = HSBToHex(this.hsb);
-        }
-        return this;
-    }
-    Color.prototype.toHSL = function (){
-        if(this.rgb){
-            this.hsl = RGBToHSL(this.rgb);
-        } else if(this.hsb){
-            this.hsl = HSBToHSL(this.hsb);
-        } else if(this.hex){
-            this.hsl = HexToHSL(this.hex);
-        }
-        return this;
-    }
-
     Color.prototype.init = function (color){
         if(regHSB.test(color)){
             var tColor = color.replace(/(?:\(|\)|hsb)*/ig,"").split(",").map(function (value){
@@ -66,7 +25,9 @@
                 saturation: tColor[1]/100,
                 brightness: tColor[2]/100
             }
-            this.toRGB().toHex().toHSL();
+            this.rgb = HSBToRGB(this.hsb);
+            this.hex = RGBToHex(this.rgb);
+            this.hsl = RGBToHSL(this.rgb);
         } else if(regRGB.test(color)){
             var tColor = color.replace(/(?:\(|\)|rgb)*/ig,"").split(",").map(function (value){
                 return parseInt(value, 10)/255;
@@ -76,10 +37,14 @@
                 green: tColor[1],
                 blue: tColor[2]
             }
-            this.toHex().toHSL().toHSB();
+            this.hsb = RGBToHSB(this.rgb);
+            this.hex = RGBToHex(this.rgb);
+            this.hsl = RGBToHSL(this.rgb);
         } else if(regHex.test(color)){
             this.hex = hexFormat(color);
-            this.toRGB().toHSL().toHSB();
+            this.rgb = hexToRGB(this.hex);
+            this.hsb = RGBToHSB(this.rgb);
+            this.hsl = RGBToHSL(this.rgb);
         } else if(regHSL.test(color)){
             var tColor = color.replace(/(?:\(|\)|hsl)*/ig,"").split(",").map(function (value){
                 return parseInt(value, 10);
@@ -89,9 +54,11 @@
                 saturation: tColor[1]/100,
                 lightness: tColor[2]/100
             }
-            this.toRGB().toHex().toHSB();
+            this.rgb = HSLToRGB(this.hsl);
+            this.hex = RGBToHex(this.rgb);
+            this.hsb = RGBToHSB(this.rgb);
         }else {
-            return false;
+            throw Error('Invalid Color!');
         }
     }
 
@@ -136,8 +103,11 @@
     }
 
     function RGBToHSB(rgb){
-        var min = Math.min(rgb.red, rgb.green, rgb.blue), 
-            max = Math.max(rgb.red, rgb.green, rgb.blue),
+        var r = rgb.red,
+            g = rgb.green,
+            b = rgb.blue,
+            min = Math.min(r, g, b), 
+            max = Math.max(r, g, b),
             delta = delta = max - min,
             hsb = {};
 
@@ -147,14 +117,14 @@
             hsb.hue = hsb.saturation = 0;
         } else { // chroma
             hsb.saturation = delta / max;
-            if( rgb.red == max ) {
-                hsb.hue = (rgb.green - rgb.blue )/delta; // between yellow & magenta
+            if(rgb.red == max) {
+                hsb.hue = (g - b)/delta; // between yellow & magenta
             }
-            else if( rgb.green == max ) {
-                hsb.hue = 2 + (rgb.blue - rgb.red )/delta; // between cyan & yellow
+            else if(g == max) {
+                hsb.hue = 2 + (b - r)/delta; // between cyan & yellow
             }
             else {
-                hsb.hue = 4 + (rgb.red - rgb.green)/delta; // between magenta & cyan
+                hsb.hue = 4 + (r - g)/delta; // between magenta & cyan
             }
         }
         hsb.hue = ((hsb.hue * 60) + 360) % 360;
@@ -183,12 +153,6 @@
             green: tColor[1],
             blue: tColor[2]
         }
-    }
-    function hexToHSL(hex){
-        RGBToHSL(hexToRGB(hex));
-    }
-    function hexToHSB(hex){
-        RGBToHSB(hexToRGB(hex));
     }
 
     function HSBToRGB(hsb){
@@ -234,12 +198,6 @@
         }
         return rgb;
     }
-    function HSBToHex(hsb){
-        RGBToHex(HSBToRGB(hsb));
-    }
-    function HSBToHSL(hsb){
-        RGBToHSL(HSBToRGB(hsb));
-    }
 
     function HSLToRGB(hsl){
         var h = hsl.hue,
@@ -270,13 +228,6 @@
             blue: b
         };
     }
-    function HSLToHex(hsl){
-        RGBToHex(HSLToRGB(hsl));
-    }
-    function HSLToHSB(hsl){
-        RGBToHSB(HSLToRGB(hsl));
-    }
-
 
     window.Color = Color;
 })(window);
