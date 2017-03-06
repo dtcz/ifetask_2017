@@ -64,6 +64,12 @@
 
     Color.prototype.init.prototype = Color.prototype;
 
+    ['RGB', 'HSL', 'Hex', 'HSB'].forEach(function (value, index, array){
+        Color.prototype['get'+ value] = function(){
+            return this[value.toLowerCase()];
+        }
+    })
+
     function RGBToHex(rgb){
         var strHex = "#";
         for(var i in rgb){
@@ -232,7 +238,3 @@
     window.Color = Color;
 })(window);
 
-// console.log(Color('hsb(100, 100%, 100%)'));
-// console.log(Color('rgb(85, 255, 0)'));
-// console.log(Color('#55ff00'));
-// console.log(Color('hsl(100, 100%, 50%)'));
