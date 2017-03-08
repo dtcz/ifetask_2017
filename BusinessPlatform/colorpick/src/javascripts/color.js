@@ -1,6 +1,29 @@
-/*
-    自己写的插件，有点垃圾，先用着，别细看，我正在完善
- */
+/**
+    颜色转换插件，支持HSB, HSL, RGB和十六进制颜色（CSS颜色）四种颜色格式。
+    输入格式：rgb([0-255], [0-255], [0-255])
+              hsl([0-360], [0-100%], [0-100%])
+              hsb([0-360], [0-100%], [0-100%])
+              #000000-#ffffff(#000-#fff)
+    输出格式：  {
+                    rgb: {
+                        red:[0-1],
+                        green: [0-1],
+                        blue: [0-1]
+                    },
+                    hsl: {
+                        hue: [0-1],
+                        saturation: [0-1],
+                        lightness: [0-1]
+                    },
+                    hsb: {
+                        hue: [0-1],
+                        saturation: [0-1],
+                        brightness: [0-1]
+                    },
+                    hex: ['#000000'-'#ffffff']
+                }
+
+ **/
 (function(window, undefined){
     "use strict";
     //支持十六进制颜色值,RGB,HSL,HSB四种，不支持RGBA,HSLA等
@@ -10,11 +33,18 @@
         regRGB = /^(rgb|RGB)/,
         regHSL = /^(hsl|HSL)/,
         regHSB = /^(hsb|HSB)/;
-
+    
+    /**
+     * Color constructor function
+     * @param {String} color 见输入格式
+     */
     function Color(color){
         return new Color.prototype.init(color);
     }
-
+    /**
+     * 无new实例化
+     * @return {Object} 见输出格式
+     */
     Color.prototype.init = function (color){
         if(regHSB.test(color)){
             var tColor = color.replace(/(?:\(|\)|hsb)*/ig,"").split(",").map(function (value){
@@ -70,6 +100,11 @@
         }
     })
 
+    /**
+     * transfer RGB to hex
+     * @param {Object} rgb {red: [0-1], green: [0-1], blue: [0-1]}
+     * @return {String} strHex [#000000-#ffffff]
+     */
     function RGBToHex(rgb){
         var strHex = "#";
         for(var i in rgb){
@@ -79,6 +114,11 @@
         return strHex;
     }
 
+    /**
+     * transfer RGB to HSL
+     * @param {Object} rgb {red: [0-1], green: [0-1], blue: [0-1]}
+     * @return {Object} { hue: [0-1], saturation: [0-1], lightness: [0-1] }
+     */
     function RGBToHSL(rgb){
         var r = rgb.red,
             g = rgb.green,
@@ -108,6 +148,11 @@
         }
     }
 
+    /**
+     * transfer RGB to HSB
+     * @param {Object} rgb {red: [0-1], green: [0-1], blue: [0-1]}
+     * @return {Object} { hue: [0-1], saturation: [0-1], brightness: [0-1] }
+     */
     function RGBToHSB(rgb){
         var r = rgb.red,
             g = rgb.green,
@@ -136,7 +181,11 @@
         hsb.hue = ((hsb.hue * 60) + 360) % 360;
         return hsb;
     }
-
+    /**
+     * 三位16进制->六位16进制
+     * @param  {String} color [#000-#fff]
+     * @return {String}       [#000000-#ffffff]
+     */
     function hexFormat(color){
         if(color.length === 4){
             var strHex = "#";
@@ -147,7 +196,12 @@
         }
         return color;
     }
-    
+
+    /**
+     * transfer hex to RGB
+     * @param {String} hex [#000000-#ffffff]
+     * @return {Object} {red: [0-1], green: [0-1], blue: [0-1]}
+     */
     function hexToRGB(hex){
         hex = hexFormat(hex.toLowerCase());
         var tColor = [];
@@ -161,6 +215,11 @@
         }
     }
 
+    /**
+     * transfer HSB to RGB
+     * @param {Object} hsl { hue: [0-1], saturation: [0-1], lightness: [0-1] }
+     * @return {Object} rgb {red: [0-1], green: [0-1], blue: [0-1]}
+     */
     function HSBToRGB(hsb){
         var rgb = {},
             h = hsb.hue/60%6,
@@ -205,6 +264,11 @@
         return rgb;
     }
 
+    /**
+     * transfer HSL to RGB
+     * @param {Object} hsl { hue: [0-1], saturation: [0-1], lightness: [0-1] }
+     * @return {Object} {red: [0-1], green: [0-1], blue: [0-1]}
+     */
     function HSLToRGB(hsl){
         var h = hsl.hue,
             s = hsl.saturation,

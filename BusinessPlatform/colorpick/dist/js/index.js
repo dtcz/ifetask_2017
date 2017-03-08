@@ -83,7 +83,7 @@ var EventUtil = (function (){
         return isOverRide ? target : tmp;
     };
 
-    var Drag = function (options){
+    var drag = function (options){
         var defaults = {
             target: '.drag',            //拖动目标
             parent: '.drag-area',   //拖动目标所在区域
@@ -139,7 +139,7 @@ var EventUtil = (function (){
         EventUtil.on(document, 'mouseup', dragEnd);
     }
 
-    window.Drag = Drag;
+    window.drag = drag;
 })(window);
 
 // create gradient
@@ -152,7 +152,7 @@ function createColorSelector(){
         selectorGrd.addColorStop(i/360, 'hsl(' + (360 - i) + ', 100%, 50%)');
     };
     selectorCtx.fillStyle = selectorGrd;
-    selectorCtx.fillRect(0, 0, 300, 300);
+    selectorCtx.fillRect(0, 0, selector.width, selector.height);
     selectorCtx.closePath();
 }
 
@@ -195,7 +195,7 @@ window.onload = function (){
         colorField.style.backgroundColor = 'hsl(' + Math.round(color.hsl.hue*360) + ', 100%, 50%)';
     }
 
-    Drag({
+    drag({
         target: '.drag-1',
         parent: '.colorfield',
         callback: function (data){
@@ -204,7 +204,7 @@ window.onload = function (){
         }
     });
 
-    Drag({
+    drag({
         target: '.drag-2',
         parent: '.colorselector',
         horizontal: false,

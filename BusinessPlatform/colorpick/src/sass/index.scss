@@ -64,6 +64,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 300px;
     overflow: hidden;
     cursor: pointer;
+    user-select: none;
     .drag {
         position: absolute;
         box-sizing: border-box;
